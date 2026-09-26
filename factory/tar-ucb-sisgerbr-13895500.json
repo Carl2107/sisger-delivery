@@ -1,0 +1,15 @@
+{
+	"name": "tar-ucb-sisgerbr-13895500",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "brazilsouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "8230f2c8-3b36-4ccf-98f1-a951a989ab33",
+		"tenantId": "cc28633f-12b8-46cb-bc15-951dae239b4d"
+	}
+}

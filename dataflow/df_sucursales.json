@@ -1,0 +1,68 @@
+{
+	"name": "df_sucursales",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sucursales_csv",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sucursales_sql",
+						"type": "DatasetReference"
+					},
+					"name": "sinkSuc"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SucDer"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          sucursal_id as string,",
+				"          restaurante_id as string,",
+				"          nombre_sucursal as string,",
+				"          ciudad as string,",
+				"          zona as string,",
+				"          direccion as string,",
+				"          capacidad_mesas as string,",
+				"          tiene_delivery as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(direccion = iif(isNull(direccion) || length(trim(direccion))==0, 'Sin dirección', direccion),",
+				"          ciudad = initCap(trim(lower(ciudad)))) ~> SucDer",
+				"SucDer sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          sucursal_id as string,",
+				"          restaurante_id as string,",
+				"          nombre_sucursal as string,",
+				"          ciudad as string,",
+				"          zona as string,",
+				"          direccion as string,",
+				"          capacidad_mesas as integer,",
+				"          tiene_delivery as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sinkSuc"
+			]
+		}
+	}
+}
